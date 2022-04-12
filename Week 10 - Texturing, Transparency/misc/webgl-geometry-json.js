@@ -9,6 +9,7 @@ function WebGLGeometryJSON (gl) {
 	// -----------------------------------------------------------------------------
 	this.getPosition = function() {
 		// todo #9 - return a vector4 of this object's world position contained in its matrix
+		return this.cameraWorldMatrix.clone().inverse();
 	}
 
 	// -----------------------------------------------------------------------------
@@ -52,6 +53,16 @@ function WebGLGeometryJSON (gl) {
 			this.gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
 			// 3. todo set wrap modes (for s and t) for the texture
+			this.gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+			this.gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.MIRRORED_REPEAT);
+			// 4. set filtering modes (magnification and minification)
+			this.gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+			this.gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+			// 5. send the image WebGL to use as this texture
+            this.gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE,rawImage);
+			// We're done for now, unbind
+			this.gl.uniform1i(textureShaderProgram.textureUniform,0);
+			this.gl.bindTexture(gl.TEXTURE_2D, null);
 			// 4. todo set filtering modes (magnification and minification)
 			// 5. send the image WebGL to use as this texture
 
@@ -110,7 +121,8 @@ function WebGLGeometryJSON (gl) {
 			// todo #6
 			// uncomment when ready
 			this.gl.activeTexture(gl.TEXTURE0);
-            this.gl.bindTexture(gl.TEXTURE_2D, this.texture);
+			this.gl.bindTexture(gl.TEXTURE_2D, this.texture);
+			
 		}
 
 		// Send our matrices to the shader
@@ -118,7 +130,7 @@ function WebGLGeometryJSON (gl) {
 		gl.uniformMatrix4fv(uniforms.viewMatrixUniform, false, camera.getViewMatrix().clone().transpose().elements);
 		gl.uniformMatrix4fv(uniforms.projectionMatrixUniform, false, projectionMatrix.clone().transpose().elements);
 		gl.uniform1f(uniforms.alphaUniform, this.alpha);
-
+        
 		gl.drawElements(gl.TRIANGLES, this.indexCount, gl.UNSIGNED_SHORT, 0);
 
 		this.texture && gl.bindTexture(gl.TEXTURE_2D, null);

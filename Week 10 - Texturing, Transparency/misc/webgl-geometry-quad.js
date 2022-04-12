@@ -8,6 +8,7 @@ function WebGLGeometryQuad (gl) {
 	// -----------------------------------------------------------------------------
 	this.getPosition = function() {
 		// todo #9 - return a vector4 of this object's world position contained in its matrix
+		return this.cameraWorldMatrix.clone().inverse();
 	}
 
 	// -----------------------------------------------------------------------------
@@ -37,7 +38,7 @@ function WebGLGeometryQuad (gl) {
 		this.indexCount = indices.length;
 
 		// create the position and color information for this object and send it to the GPU
-		this.vertexBuffer = gl.createBuffer();
+		this.vertexBuffer = this.gl.createBuffer();
 		this.gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
 		this.gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verts), gl.STATIC_DRAW);
 
@@ -57,7 +58,7 @@ function WebGLGeometryQuad (gl) {
 			// todo #4 - create the texture (uncomment when ready)
 			// 1.
 			
-			var image = new Image();
+			
 
 			this.texture = gl.createTexture();
 
@@ -76,7 +77,7 @@ function WebGLGeometryQuad (gl) {
 			this.gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 			this.gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 			// 5. send the image WebGL to use as this texture
-            this.gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE,image);
+            this.gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE,rawImage);
 			// We're done for now, unbind
 			this.gl.uniform1i(textureShaderProgram.textureUniform,0);
 			this.gl.bindTexture(gl.TEXTURE_2D, null);
@@ -94,8 +95,8 @@ function WebGLGeometryQuad (gl) {
 		this.gl.vertexAttribPointer(
 			attributes.vertexPositionAttribute,
 			3,
-			gl.FLOAT,
-			gl.FALSE,
+			this.gl.FLOAT,
+			this.gl.FALSE,
 			0,
 			0
 		);
@@ -119,8 +120,8 @@ function WebGLGeometryQuad (gl) {
 			this.gl.vertexAttribPointer(
 				attributes.vertexTexcoordsAttribute,
 				2,
-				gl.FLOAT,
-				gl.FALSE,
+				this.gl.FLOAT,
+				this.gl.FALSE,
 				0,
 				0
 			);

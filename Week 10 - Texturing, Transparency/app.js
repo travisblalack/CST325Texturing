@@ -44,9 +44,16 @@ function initGL(canvas) {
         gl = canvas.getContext("webgl", { alpha: false });
         gl.canvasWidth = canvas.width;
         gl.canvasHeight = canvas.height;
+         
 
+        
         // todo #7
         // todo enable depth test (z-buffering)
+        gl.clearColor(0.707, 0.707, 1, 1.0);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+        gl.enable(gl.CULL_FACE);
+        gl.cullFace(gl.BACK);
         // todo enable backface culling
     } catch (e) {}
 
@@ -152,7 +159,8 @@ function updateAndRender() {
     // todo #8
     //   1. enable blending
     //   2. set blend mode source to gl.SRC_ALPHA and destination to gl.ONE_MINUS_SRC_ALPHA
-
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA , gl.ONE_MINUS_SRC_ALPHA);
     // todo #10 apply the painter's algorithm
 
     // todo #6
