@@ -49,11 +49,12 @@ function initGL(canvas) {
         
         // todo #7
         // todo enable depth test (z-buffering)
-        gl.clearColor(0.707, 0.707, 1, 1.0);
+        
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
+        
+        gl.enable(gl.DEPTH_TEST);
         gl.enable(gl.CULL_FACE);
-        gl.cullFace(gl.BACK);
+        
         // todo enable backface culling
     } catch (e) {}
 
@@ -159,26 +160,28 @@ function updateAndRender() {
     // todo #8
     //   1. enable blending
     //   2. set blend mode source to gl.SRC_ALPHA and destination to gl.ONE_MINUS_SRC_ALPHA
-    gl.enable(gl.BLEND);
-    gl.blendFunc(gl.SRC_ALPHA , gl.ONE_MINUS_SRC_ALPHA);
-    // todo #10 apply the painter's algorithm
-	 const sphereGeometryList1=sphereGeometryList.sort(function (a,b){
-         const nearSphere = camera.getPosition().clone().subtract(a.getPosition());
-         const farSphere = camera.getPosition().clone().subtract(b.getPosition());
-         return nearSphere.length() > farSphere.length() ? -1 : 1;
+   gl.enable(gl.BLEND);
 
-         
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    // todo #10 apply the painter's algorithm
+    
+	const sphereGeometryList1 = sphereGeometryList.sort(function (a,b){
+        const farSphere = camera.getPosition().clone().subtract(a.getPosition());
+        const nearSphere = camera.getPosition().clone().subtract(b.getPosition());
+        return farSphere.length() > nearSphere.length();
+           
      });
 
         
     // todo #6
     // uncomment when directed by guide
-    for (var i = 0; i < sphereGeometryList.length; ++i) {
-       sphereGeometryList1[i].render(camera, projectionMatrix, textureShaderProgram);
+    for (var i = 0; i < sphereGeometryList1.length; ++i) {
+        sphereGeometryList1[i].render(camera, projectionMatrix, textureShaderProgram);
        }
 
     // todo - disable blending
     gl.disable(gl.BLEND);
+    gl.depthMask(true);
 }
 
 // EOF 00100001-10

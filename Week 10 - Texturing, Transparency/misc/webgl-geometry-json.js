@@ -14,12 +14,9 @@ function WebGLGeometryJSON (gl) {
 				this.worldMatrix.elements[3],
 				this.worldMatrix.elements[7],
 				this.worldMatrix.elements[11],
-				this.worldMatrix.elements[15]
 				
-			);
-	
-		
-		
+				
+			).normalize();
 	}
 
 	// -----------------------------------------------------------------------------

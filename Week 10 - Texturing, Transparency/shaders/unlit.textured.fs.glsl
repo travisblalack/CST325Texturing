@@ -18,9 +18,9 @@ void main(void) {
 
     // todo #5
     
-   gl_FragColor = uAlpha*texture2D(uTexture,vTexcoords);
+   gl_FragColor = texture2D(uTexture,vTexcoords);
 
-   // gl_FragColor = texture2D(uTexture,vTexcoords);
+   gl_FragColor.a=uAlpha;
     
    // gl_FragColor = vec4(vTexcoords,0.0,1.0);
     // todo #3
