@@ -20,8 +20,17 @@ function OrbitCamera (input) {
 
 	// -----------------------------------------------------------------------------
 	this.getPosition = function() {
+		return new Vector4(
+			this.cameraWorldMatrix.elements[3],
+			this.cameraWorldMatrix.elements[7],
+			this.cameraWorldMatrix.elements[11],
+			this.cameraWorldMatrix.elements[15]
+			
+		);
+
+		
+		
 		// todo #9 - return a vector4 of the camera's world position contained in its matrix
-	    return this.cameraWorldMatrix.clone().inverse();
 	}
 
 	// -------------------------------------------------------------------------

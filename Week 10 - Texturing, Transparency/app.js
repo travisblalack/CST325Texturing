@@ -162,14 +162,23 @@ function updateAndRender() {
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA , gl.ONE_MINUS_SRC_ALPHA);
     // todo #10 apply the painter's algorithm
+	 const sphereGeometryList1=sphereGeometryList.sort(function (a,b){
+         const nearSphere = camera.getPosition().clone().subtract(a.getPosition());
+         const farSphere = camera.getPosition().clone().subtract(b.getPosition());
+         return nearSphere.length() > farSphere.length() ? -1 : 1;
 
+         
+     });
+
+        
     // todo #6
     // uncomment when directed by guide
     for (var i = 0; i < sphereGeometryList.length; ++i) {
-       sphereGeometryList[i].render(camera, projectionMatrix, textureShaderProgram);
+       sphereGeometryList1[i].render(camera, projectionMatrix, textureShaderProgram);
        }
 
     // todo - disable blending
+    gl.disable(gl.BLEND);
 }
 
 // EOF 00100001-10
